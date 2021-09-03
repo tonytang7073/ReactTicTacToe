@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactTTTGame", "ReactTTTGame\ReactTTTGame.csproj", "{762F71E6-F265-4AE0-BFCC-4564C69A0B6C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{762F71E6-F265-4AE0-BFCC-4564C69A0B6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{762F71E6-F265-4AE0-BFCC-4564C69A0B6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{762F71E6-F265-4AE0-BFCC-4564C69A0B6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{762F71E6-F265-4AE0-BFCC-4564C69A0B6C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F9EAB564-291C-4BA9-A471-0A7539F5CB81}
+	EndGlobalSection
+EndGlobal
