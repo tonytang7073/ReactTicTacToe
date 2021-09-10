@@ -4,28 +4,6 @@ import './tictactoe.css';
 
 export class TicTacToe extends Component {
 
-    render() {
-
-        return (
-
-            <div className="game">
-                <div className='game-board'>
-                    <Board />
-                </div>
-                <div className="game-info">
-                    <div>{/* status */}</div>
-                    <div>{/* */}</div>
-                </div>
-            </div>
-
-        );
-
-    }
-
-
-}
-
-export class Board extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -48,7 +26,7 @@ export class Board extends Component {
         Object.assign(tmpState, this.state);
         tmpState.squares = squares;
         tmpState.xIsNext = !this.state.xIsNext;
-        
+
 
         this.setState(tmpState);
     }
@@ -65,24 +43,17 @@ export class Board extends Component {
         this.setState(tmpState);
     }
 
+
     renderSquare(i) {
-        return (<Square
+        return (<Square key={i}
             displayValue={this.state.squares[i]}
             onClick={() => this.handleSquareClick(i)}
         />
         );
     }
-
-
-    render() {
-
-        let d = this.state.gameSize;
-
-        const winner = calculateWinner(this.state.squares, d);
-        let statusPrefix = winner ? "Winner:" : "Next Player:";
-        let status = winner ? statusPrefix.concat(winner) : statusPrefix.concat(this.state.xIsNext ? "X" : "O");
-
-
+   
+    generateBoardRows(gameSize) {
+        let d = parseInt(gameSize);
         let rows = [];
         for (let r = 0; r < d; r++) {
 
@@ -94,15 +65,65 @@ export class Board extends Component {
             rows.push(<div className="board-row">{cols}</div>); //generate the rows
         }
 
+        return rows;
+    }
+
+    render() {
+
+       
+        const winner = calculateWinner(this.state.squares, this.state.gameSize);
+        let statusPrefix = winner ? "Winner:" : "Next Player:";
+        let status = winner ? statusPrefix.concat(winner) : statusPrefix.concat(this.state.xIsNext ? "X" : "O");
+
+
+
+
 
 
         return (
 
+            <div className="container">
+                <div className="row">
+                    <div class="col">
+                        <GameSelection handleOnChange={this.handleOnChange.bind(this)} />
+                    </div>
+                    <div class="col">
+                        <div className="game-info">
+                            <div>{status}</div>
+                            <div>{/* */}</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div class="col">
+                        <div className='game-board'>
+                            <Board BoardRows={this.generateBoardRows(this.state.gameSize)} />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+
+
+
+        );
+
+    }
+
+
+}
+
+export class Board extends Component {
+    
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+
+        return (
             <div>
-                <GameSelection handleOnChange={this.handleOnChange.bind(this)} />
-                <div className="status">{status}</div>
-                {rows}
+                {this.props.BoardRows}
             </div>
         );
 
@@ -124,6 +145,11 @@ function GameSelection(props){
                     <option value="8">Game 8X8</option>
                     <option value="9">Game 9X9</option>
                     <option value="10">Game 10X10</option>
+                    <option value="11">Game 11X11</option>
+                    <option value="12">Game 12X12</option>
+                    <option value="13">Game 13X13</option>
+                    <option value="14">Game 14X14</option>
+                    <option value="15">Game 15X15</option>
                 </select>
             </div>
         );
@@ -149,8 +175,10 @@ function Square(props) {
 //    }
 //}
 
-function calculateWinner(squares, d) {
- 
+function calculateWinner(squares, gameSize) {
+
+    let d = parseInt(gameSize);
+
     const lines = winningpositions(d);
 
     for (let i = 0; i < lines.length; i++) {
@@ -189,7 +217,10 @@ function calculateWinner(squares, d) {
     //    [0, 4, 8],
     //    [2, 4, 6],
     //];
-function winningpositions(d) {
+function winningpositions(gameSize) {
+
+    let d = parseInt(gameSize);
+
     if (!Number.isSafeInteger(d) && d <= 2) {
         throw new TypeError("The diamention of the squre must be greater or equal to 3");
     }
