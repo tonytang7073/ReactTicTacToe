@@ -75,11 +75,6 @@ export class TicTacToe extends Component {
         let statusPrefix = winner ? "Winner:" : "Next Player:";
         let status = winner ? statusPrefix.concat(winner) : statusPrefix.concat(this.state.xIsNext ? "X" : "O");
 
-
-
-
-
-
         return (
 
             <div className="container">
@@ -190,6 +185,8 @@ function calculateWinner(squares, gameSize) {
 
             if (init && squares[winComb[x]] === init) {
                 lastP = x;
+            } else {
+                break;
             }
         }
 
