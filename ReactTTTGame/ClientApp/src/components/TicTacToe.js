@@ -6,13 +6,18 @@ export class TicTacToe extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
+        this.state = this.newGame(3);
+    }
+
+    newGame(gameSize) {
+        return {
+
             history: [{ squares: Array(9).fill(null), }],
             //squares: Array(9).fill(null),
-            stepNumber:0,
+            stepNumber: 0,
             xIsNext: true,
-            gameSize: 3,
-        };
+            gameSize: gameSize,
+        }
     }
 
     handleSquareClick(i) {
@@ -40,24 +45,15 @@ export class TicTacToe extends Component {
     }
 
     handleOnChange(e) {
-        let tmpState = {};
-        //Object.assign(tmpState, this.state); //retain the previous game states if you want to.
-        tmpState.history = [{ squares: Array(e.target.value * e.target.value).fill(null), }];
-        //tmpState.squares = Array(e.target.value * e.target.value).fill(null);
-        tmpState.xIsNext = true;
-        tmpState.stepNumber = 0;
-
-        tmpState.gameSize = e.target.value;
-
+        let tmpState = this.newGame(e.target.value);
         this.setState(tmpState);
     }
 
     jumpTo(step) {
-        //const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        //setState is a merge. it replace the variables contained, and keep the others intact.
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) === 0,
-            //history: history,
         });
     }
 
