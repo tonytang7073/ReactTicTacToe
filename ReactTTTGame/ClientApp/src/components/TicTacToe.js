@@ -7,14 +7,20 @@ export class TicTacToe extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            squares: Array(9).fill(null),
+            history: [{ squares: Array(9).fill(null), }],
+            //squares: Array(9).fill(null),
+            stepNumber:0,
             xIsNext: true,
             gameSize: 3,
         };
     }
 
     handleSquareClick(i) {
-        const squares = this.state.squares.slice();
+        const history = this.state.history.slice(0, this.state.stepNumber + 1); // go back in time then throw away all the "future" history if we make a new move from here
+         const current = history[history.length - 1];
+        //const current = this.state.squares;
+
+        const squares = current.squares.slice();
 
         if (calculateWinner(squares, this.state.gameSize) || squares[i]) {
             return;
@@ -24,7 +30,9 @@ export class TicTacToe extends Component {
 
         let tmpState = {};
         Object.assign(tmpState, this.state);
-        tmpState.squares = squares;
+        tmpState.history = history.concat([{ squares: squares }]);
+        //tmpState.squares = squares;
+        tmpState.stepNumber = history.length;
         tmpState.xIsNext = !this.state.xIsNext;
 
 
@@ -34,44 +42,48 @@ export class TicTacToe extends Component {
     handleOnChange(e) {
         let tmpState = {};
         //Object.assign(tmpState, this.state); //retain the previous game states if you want to.
-
-        tmpState.squares = Array(e.target.value * e.target.value).fill(null);
+        tmpState.history = [{ squares: Array(e.target.value * e.target.value).fill(null), }];
+        //tmpState.squares = Array(e.target.value * e.target.value).fill(null);
         tmpState.xIsNext = true;
+        tmpState.stepNumber = 0;
 
         tmpState.gameSize = e.target.value;
 
         this.setState(tmpState);
     }
 
-
-    renderSquare(i) {
-        return (<Square key={i}
-            displayValue={this.state.squares[i]}
-            onClick={() => this.handleSquareClick(i)}
-        />
-        );
+    jumpTo(step) {
+        //const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        this.setState({
+            stepNumber: step,
+            xIsNext: (step % 2) === 0,
+            //history: history,
+        });
     }
+
+
    
-    generateBoardRows(gameSize) {
-        let d = parseInt(gameSize);
-        let rows = [];
-        for (let r = 0; r < d; r++) {
-
-            let cols = [];
-            for (let c = 0; c < d; c++) {
-                cols.push(this.renderSquare(c + r * d));    //generate the cols
-            }
-
-            rows.push(<div className="board-row">{cols}</div>); //generate the rows
-        }
-
-        return rows;
-    }
 
     render() {
 
-       
-        const winner = calculateWinner(this.state.squares, this.state.gameSize);
+        const history = this.state.history;
+        const current = history[this.state.stepNumber];
+
+        const moves = history.map((step, move) => {
+            const desc = move ? "Go to move #" + move : "Go to game start";
+            return (
+                <li key={move}>
+                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                </li>
+            );
+
+        });
+
+
+        const winner = calculateWinner(current.squares, this.state.gameSize);
+
+
+    
         let statusPrefix = winner ? "Winner:" : "Next Player:";
         let status = winner ? statusPrefix.concat(winner) : statusPrefix.concat(this.state.xIsNext ? "X" : "O");
 
@@ -85,14 +97,18 @@ export class TicTacToe extends Component {
                     <div class="col">
                         <div className="game-info">
                             <div>{status}</div>
-                            <div>{/* */}</div>
                         </div>
                     </div>
                 </div>
                 <div className="row">
                     <div class="col">
                         <div className='game-board'>
-                            <Board BoardRows={this.generateBoardRows(this.state.gameSize)} />
+                            <Board gameSize={this.state.gameSize} squares={current.squares} onClick={(i) => this.handleSquareClick(i)} />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div>
+                            <ol>{moves}</ol>
                         </div>
                     </div>
                 </div>
@@ -109,16 +125,49 @@ export class TicTacToe extends Component {
 }
 
 export class Board extends Component {
-    
-    constructor(props) {
-        super(props);
+
+        //renderSquare(i) {
+    //    const history = this.state.history;
+    //    const current = history[history.length - 1];
+
+    //    return (<Square key={i}
+    //        displayValue={current.squares[i]}
+    //        onClick={() => this.handleSquareClick(i)}
+    //    />
+    //    );
+    //}
+
+    renderSquare(i) {
+        return (
+            <Square displayValue={this.props.squares[i]}
+                onClick={() => this.props.onClick(i)}
+            />
+
+        );
     }
+
+    generateBoard(gameSize) {
+        let d = parseInt(gameSize);
+        let rows = [];
+        for (let r = 0; r < d; r++) {
+
+            let cols = [];
+            for (let c = 0; c < d; c++) {
+                cols.push(this.renderSquare(c + r * d));    //generate the cols
+            }
+
+            rows.push(<div className="board-row">{cols}</div>); //generate the rows
+        }
+
+        return rows;
+    }
+
 
     render() {
 
         return (
             <div>
-                {this.props.BoardRows}
+                {this.generateBoard(this.props.gameSize)}
             </div>
         );
 
@@ -186,7 +235,7 @@ function calculateWinner(squares, gameSize) {
             if (init && squares[winComb[x]] === init) {
                 lastP = x;
             } else {
-                break;
+                break;  //if any not match break the loop.
             }
         }
 
@@ -216,7 +265,7 @@ function calculateWinner(squares, gameSize) {
     //];
 function winningpositions(gameSize) {
 
-    let d = parseInt(gameSize);
+    let d = parseInt(gameSize); // to fix a potential bug of "4" + 1 = 41 instead of 5.
 
     if (!Number.isSafeInteger(d) && d <= 2) {
         throw new TypeError("The diamention of the squre must be greater or equal to 3");
