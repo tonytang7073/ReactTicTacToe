@@ -101,10 +101,13 @@ export class TicTacToe extends Component {
                         </div>
                     </div>
                 </div>
+
                 <div className="row">
                     <div class="col">
-                        <div className='game-board'>
-                            <Board gameSize={this.state.gameSize} squares={current.squares} onClick={(e, i) => this.handleSquareClick(e, i)} />
+                        <div className="game">
+                            <div className='game-board'>
+                                <Board gameSize={this.state.gameSize} squares={current.squares} onClick={(e, i) => this.handleSquareClick(e, i)} />
+                            </div>
                         </div>
                     </div>
                     <div class="col">
@@ -201,7 +204,7 @@ function GameSelection(props){
         return (
 
             <div>
-                <select id="gameSize" name="gameSize" onChange={props.handleOnChange}>
+                <select class="form-control" id="gameSize" name="gameSize" onChange={props.handleOnChange}>
                     <option value="3">Game 3X3</option>
                     <option value="4">Game 4X4</option>
                     <option value="5">Game 5X5</option>
@@ -213,8 +216,8 @@ function GameSelection(props){
                     <option value="11">Game 11X11</option>
                     <option value="12">Game 12X12</option>
                     <option value="13">Game 13X13</option>
-                    <option value="14">Game 14X14</option>
-                    <option value="15">Game 15X15</option>
+                    {/*<option value="14">Game 14X14</option>*/}
+                    {/*<option value="15">Game 15X15</option>*/}
                 </select>
             </div>
         );
