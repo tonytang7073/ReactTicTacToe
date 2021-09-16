@@ -93,7 +93,7 @@ export class TicTacToe extends Component {
             <div className="container">
                 <div className="row">
                     <div class="col">
-                        <GameSelection handleOnChange={this.handleOnChange.bind(this)} />
+                        <GameSelection handleOnChange={(e) => this.handleOnChange(e)} />
                     </div>
                     <div class="col">
                         <div className="game-info">
