@@ -12,7 +12,7 @@ export class TicTacToe extends Component {
     newGame(gameSize) {
         return {
 
-            history: [{ squares: Array(9).fill(null), }],
+            history: [{ squares: Array(9).fill(null), stepx: 0, stepy: 0, }],
             //squares: Array(9).fill(null),
             stepNumber: 0,
             xIsNext: true,
@@ -20,10 +20,15 @@ export class TicTacToe extends Component {
         }
     }
 
-    handleSquareClick(i) {
+    handleSquareClick(e, i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1); // go back in time then throw away all the "future" history if we make a new move from here
          const current = history[history.length - 1];
         //const current = this.state.squares;
+
+        let x = e.target.attributes.cols.value;
+        let y = e.target.attributes.rows.value;
+
+        
 
         const squares = current.squares.slice();
 
@@ -35,7 +40,7 @@ export class TicTacToe extends Component {
 
         let tmpState = {};
         Object.assign(tmpState, this.state);
-        tmpState.history = history.concat([{ squares: squares }]);
+        tmpState.history = history.concat([{ squares: squares, stepx: x, stepy: y }]);
         //tmpState.squares = squares;
         tmpState.stepNumber = history.length;
         tmpState.xIsNext = !this.state.xIsNext;
@@ -66,7 +71,7 @@ export class TicTacToe extends Component {
         const current = history[this.state.stepNumber];
 
         const moves = history.map((step, move) => {
-            const desc = move ? "Go to move #" + move : "Go to game start";
+            const desc = move ? "Go to move (" + step.stepx + ", " + step.stepy + ")" : "Go to game start";
             return (
                 <li key={move}>
                     <button onClick={() => this.jumpTo(move)}>{desc}</button>
@@ -99,7 +104,7 @@ export class TicTacToe extends Component {
                 <div className="row">
                     <div class="col">
                         <div className='game-board'>
-                            <Board gameSize={this.state.gameSize} squares={current.squares} onClick={(i) => this.handleSquareClick(i)} />
+                            <Board gameSize={this.state.gameSize} squares={current.squares} onClick={(e, i) => this.handleSquareClick(e, i)} />
                         </div>
                     </div>
                     <div class="col">
@@ -133,12 +138,18 @@ export class Board extends Component {
     //    );
     //}
 
-    renderSquare(i) {
+    renderSquare(i, x, y) {
         return (
-            <Square displayValue={this.props.squares[i]}
-                onClick={() => this.props.onClick(i)}
+            <Square displayValue={this.props.squares[i]} x={x} y={y}
+                onClick={(e) => this.props.onClick(e, i)}
             />
 
+        );
+    }
+
+    renderSquareLabel(i) {
+        return (
+            <SquareLabel displayValue={i} />
         );
     }
 
@@ -148,8 +159,22 @@ export class Board extends Component {
         for (let r = 0; r < d; r++) {
 
             let cols = [];
+
+            let axes = [];
+            if (r === 0) {
+
+                for (let x = 0; x < d + 1; x++) {
+                    axes.push(this.renderSquareLabel(x)); //x label
+                }
+
+                rows.push(<div className="board-row">{axes}</div>);
+            }
+
             for (let c = 0; c < d; c++) {
-                cols.push(this.renderSquare(c + r * d));    //generate the cols
+
+                if (c === 0) { cols.push(this.renderSquareLabel(r + 1)); } // y label
+
+                cols.push(this.renderSquare(c + r * d, c + 1, r + 1));    //generate the cols
             }
 
             rows.push(<div className="board-row">{cols}</div>); //generate the rows
@@ -198,10 +223,18 @@ function GameSelection(props){
 
 function Square(props) {
     return (
-        <button className="square" onClick={ props.onClick }>
+        <button className="square" onClick={props.onClick} cols={props.x} rows={props.y}>
             {props.displayValue}
             </button>
         )
+}
+
+function SquareLabel(props) {
+    return (
+        <button className="squareLabel">
+            {props.displayValue}
+        </button>
+    )
 }
 
 //No its own state, it is a functional components now.
