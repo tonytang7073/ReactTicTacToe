@@ -72,9 +72,10 @@ export class TicTacToe extends Component {
 
         const moves = history.map((step, move) => {
             const desc = move ? "Go to move (" + step.stepx + ", " + step.stepy + ")" : "Go to game start";
+            let butClass = move === this.state.stepNumber ? "btn btn-primary active" : "btn btn-secondary"
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button className={butClass} onClick={() => this.jumpTo(move)}>{desc}</button>
                 </li>
             );
 
