@@ -12,23 +12,27 @@ export class TicTacToe extends Component {
     newGame(gameSize) {
         return {
 
-            history: [{ squares: Array(9).fill(null), stepx: 0, stepy: 0, }],
+            history: [{ squares: Array(9).fill(null), stepx: 0, stepy: 0, index: 0, }],
             //squares: Array(9).fill(null),
             stepNumber: 0,
             xIsNext: true,
             gameSize: gameSize,
+            sortAscending: true,
         }
     }
 
     handleSquareClick(e, i) {
         const history = this.state.history.slice(0, this.state.stepNumber + 1); // go back in time then throw away all the "future" history if we make a new move from here
-         const current = history[history.length - 1];
+
+        let curStepindex = history.length - 1;
+        const current = history[curStepindex];
         //const current = this.state.squares;
 
         let x = e.target.attributes.cols.value;
         let y = e.target.attributes.rows.value;
 
-        
+
+
 
         const squares = current.squares.slice();
 
@@ -40,7 +44,7 @@ export class TicTacToe extends Component {
 
         let tmpState = {};
         Object.assign(tmpState, this.state);
-        tmpState.history = history.concat([{ squares: squares, stepx: x, stepy: y }]);
+        tmpState.history = history.concat([{ squares: squares, stepx: x, stepy: y, index: curStepindex + 1, }]);
         //tmpState.squares = squares;
         tmpState.stepNumber = history.length;
         tmpState.xIsNext = !this.state.xIsNext;
@@ -62,30 +66,42 @@ export class TicTacToe extends Component {
         });
     }
 
+    handleSortByClick() {
+        this.setState({
+            sortAscending: !this.state.sortAscending,
+        });
+    }
 
    
+
 
     render() {
 
         const history = this.state.history;
         const current = history[this.state.stepNumber];
 
-        const moves = history.map((step, move) => {
-            const desc = move ? "Go to move (" + step.stepx + ", " + step.stepy + ")" : "Go to game start";
-            let butClass = move === this.state.stepNumber ? "btn btn-primary active" : "btn btn-secondary"
-            return (
-                <li key={move}>
-                    <button className={butClass} onClick={() => this.jumpTo(move)}>{desc}</button>
-                </li>
-            );
 
-        });
+        const sortedHistory = [].concat(history);
+
+
+        const moves = sortedHistory
+            .sort((a, b) => this.state.sortAscending ? a.index - b.index : b.index - a.index)
+            .map((step, move) => {
+                const desc = step.index ? "Go to move (" + step.stepx + ", " + step.stepy + ")" : "Go to game start";
+                let butClass = step.index === this.state.stepNumber ? "btn btn-secondary active" : "btn btn-secondary"
+                return (
+                    <li key={move}>
+                        <button className={butClass} onClick={() => this.jumpTo(step.index)}>{desc}</button>
+                    </li>
+                );
+
+            });
 
 
         const winner = calculateWinner(current.squares, this.state.gameSize);
 
 
-    
+
         let statusPrefix = winner ? "Winner:" : "Next Player:";
         let status = winner ? statusPrefix.concat(winner) : statusPrefix.concat(this.state.xIsNext ? "X" : "O");
 
@@ -93,7 +109,7 @@ export class TicTacToe extends Component {
 
             <div className="container">
                 <div className="row">
-                    <div class="col">
+                    <div class="col-8">
                         <GameSelection handleOnChange={(e) => this.handleOnChange(e)} />
                     </div>
                     <div class="col">
@@ -104,7 +120,7 @@ export class TicTacToe extends Component {
                 </div>
 
                 <div className="row">
-                    <div class="col">
+                    <div class="col-8">
                         <div className="game">
                             <div className='game-board'>
                                 <Board gameSize={this.state.gameSize} squares={current.squares} onClick={(e, i) => this.handleSquareClick(e, i)} />
@@ -113,13 +129,12 @@ export class TicTacToe extends Component {
                     </div>
                     <div class="col">
                         <div>
+                            <button onClick={() => this.handleSortByClick()}>{ this.state.sortAscending ? "Asce" : "Desc" }</button>
                             <ol>{moves}</ol>
                         </div>
                     </div>
                 </div>
             </div>
-
-
 
 
         );
@@ -217,8 +232,8 @@ function GameSelection(props){
                     <option value="11">Game 11X11</option>
                     <option value="12">Game 12X12</option>
                     <option value="13">Game 13X13</option>
-                    {/*<option value="14">Game 14X14</option>*/}
-                    {/*<option value="15">Game 15X15</option>*/}
+                    <option value="14">Game 14X14</option>
+                    <option value="15">Game 15X15</option>
                 </select>
             </div>
         );
