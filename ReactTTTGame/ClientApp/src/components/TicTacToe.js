@@ -102,8 +102,11 @@ export class TicTacToe extends Component {
 
         const wonComb = winner ? winner.winComb : null;
 
+        const allDone = current.squares.some(x => x == null) ? false : true;
+
         let statusPrefix = winner ? "Winner:" : "Next Player:";
-        let status = winner ? statusPrefix.concat(winner.winner) : statusPrefix.concat(this.state.xIsNext ? "X" : "O");
+
+        let status = winner ? statusPrefix.concat(winner.winner) : allDone ? "Well Done! It's a draw!" : statusPrefix.concat(this.state.xIsNext ? "X" : "O");
 
         return (
 
