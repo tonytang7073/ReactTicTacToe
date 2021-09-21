@@ -12,7 +12,7 @@ export class TicTacToe extends Component {
     newGame(gameSize) {
         return {
 
-            history: [{ squares: Array(9).fill(null), stepx: 0, stepy: 0, index: 0, }],
+            history: [{ squares: Array(9).fill(null), stepx: 0, stepy: 0, stepIndex: 0, }],
             //squares: Array(9).fill(null),
             stepNumber: 0,
             xIsNext: true,
@@ -44,7 +44,7 @@ export class TicTacToe extends Component {
 
         let tmpState = {};
         Object.assign(tmpState, this.state);
-        tmpState.history = history.concat([{ squares: squares, stepx: x, stepy: y, index: curStepindex + 1, }]);
+        tmpState.history = history.concat([{ squares: squares, stepx: x, stepy: y, stepIndex: curStepindex + 1, }]);
         //tmpState.squares = squares;
         tmpState.stepNumber = history.length;
         tmpState.xIsNext = !this.state.xIsNext;
@@ -85,13 +85,13 @@ export class TicTacToe extends Component {
 
 
         const moves = sortedHistory
-            .sort((a, b) => this.state.sortAscending ? a.index - b.index : b.index - a.index)
+            .sort((a, b) => this.state.sortAscending ? a.stepIndex - b.stepIndex : b.stepIndex - a.stepIndex)
             .map((step, move) => {
-                const desc = step.index ? "Go to move (" + step.stepx + ", " + step.stepy + ")" : "Go to game start";
-                let butClass = step.index === this.state.stepNumber ? "btn btn-secondary active" : "btn btn-secondary"
+                const desc = step.stepIndex ? "Go to move (" + step.stepx + ", " + step.stepy + ")" : "Go to game start";
+                let butClass = step.stepIndex === this.state.stepNumber ? "btn btn-secondary active" : "btn btn-secondary"
                 return (
                     <li key={move}>
-                        <button className={butClass} onClick={() => this.jumpTo(step.index)}>{desc}</button>
+                        <button className={butClass} onClick={() => this.jumpTo(step.stepIndex)}>{desc}</button>
                     </li>
                 );
 
