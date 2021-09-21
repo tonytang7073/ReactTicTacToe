@@ -129,7 +129,7 @@ export class TicTacToe extends Component {
                     </div>
                     <div class="col">
                         <div>
-                            <button onClick={() => this.handleSortByClick()}>{ this.state.sortAscending ? "Asce" : "Desc" }</button>
+                            <button onClick={() => this.handleSortByClick()}>Sort <span class={this.state.sortAscending ? "fa fa-sort-amount-asc" : "fa fa-sort-amount-desc"}></span></button>
                             <ol>{moves}</ol>
                         </div>
                     </div>
