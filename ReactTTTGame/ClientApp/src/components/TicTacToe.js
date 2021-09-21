@@ -160,10 +160,9 @@ export class Board extends Component {
     //    );
     //}
 
-    renderSquare(i, x, y, win) {
-        let highlight = win ? true : false;
+    renderSquare(i, x, y, win = false) {
         return (
-            <Square displayValue={this.props.squares[i]} x={x} y={y} highlight={highlight}
+            <Square displayValue={this.props.squares[i]} x={x} y={y} highlight={win}
                 onClick={(e) => this.props.onClick(e, i)}
             />
 
