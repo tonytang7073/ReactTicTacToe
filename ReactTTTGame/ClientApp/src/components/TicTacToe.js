@@ -100,10 +100,10 @@ export class TicTacToe extends Component {
 
         const winner = calculateWinner(current.squares, this.state.gameSize);
 
-
+        const wonComb = winner ? winner.winComb : null;
 
         let statusPrefix = winner ? "Winner:" : "Next Player:";
-        let status = winner ? statusPrefix.concat(winner) : statusPrefix.concat(this.state.xIsNext ? "X" : "O");
+        let status = winner ? statusPrefix.concat(winner.winner) : statusPrefix.concat(this.state.xIsNext ? "X" : "O");
 
         return (
 
@@ -123,7 +123,7 @@ export class TicTacToe extends Component {
                     <div class="col-8">
                         <div className="game">
                             <div className='game-board'>
-                                <Board gameSize={this.state.gameSize} squares={current.squares} onClick={(e, i) => this.handleSquareClick(e, i)} />
+                                <Board gameSize={this.state.gameSize} squares={current.squares} onClick={(e, i) => this.handleSquareClick(e, i)} won={wonComb} />
                             </div>
                         </div>
                     </div>
@@ -157,9 +157,10 @@ export class Board extends Component {
     //    );
     //}
 
-    renderSquare(i, x, y) {
+    renderSquare(i, x, y, win) {
+        let highlight = win ? true : false;
         return (
-            <Square displayValue={this.props.squares[i]} x={x} y={y}
+            <Square displayValue={this.props.squares[i]} x={x} y={y} highlight={highlight}
                 onClick={(e) => this.props.onClick(e, i)}
             />
 
@@ -175,6 +176,9 @@ export class Board extends Component {
     generateBoard(gameSize) {
         let d = parseInt(gameSize);
         let rows = [];
+
+        let wonComb = this.props.won? this.props.won.slice(): [];
+
         for (let r = 0; r < d; r++) {
 
             let cols = [];
@@ -193,7 +197,10 @@ export class Board extends Component {
 
                 if (c === 0) { cols.push(this.renderSquareLabel(r + 1)); } // y label
 
-                cols.push(this.renderSquare(c + r * d, c + 1, r + 1));    //generate the cols
+                let inx = c + r * d;
+                let win = wonComb.includes(inx);
+
+                cols.push(this.renderSquare(inx, c + 1, r + 1, win));    //generate the cols
             }
 
             rows.push(<div className="board-row">{cols}</div>); //generate the rows
@@ -242,7 +249,7 @@ function GameSelection(props){
 
 function Square(props) {
     return (
-        <button className="square" onClick={props.onClick} cols={props.x} rows={props.y}>
+        <button className={props.highlight ? "square win" : "square" } onClick={props.onClick} cols={props.x} rows={props.y}>
             {props.displayValue}
             </button>
         )
@@ -287,7 +294,9 @@ function calculateWinner(squares, gameSize) {
             }
         }
 
-        if (lastP === winComb.length - 1) { return init;}
+        if (lastP === winComb.length - 1) {
+            return { winner: init, winComb: winComb };
+        }
 
 
 

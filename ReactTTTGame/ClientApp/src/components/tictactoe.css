@@ -27,6 +27,10 @@
         outline: none;
     }
 
+.win {
+    color:white;
+    background: #f44336;
+}
 
 .game {
     display: flex;
