@@ -86,11 +86,11 @@ export class TicTacToe extends Component {
 
         const moves = sortedHistory
             .sort((a, b) => this.state.sortAscending ? a.stepIndex - b.stepIndex : b.stepIndex - a.stepIndex)
-            .map((step, move) => {
+            .map((step) => {
                 const desc = step.stepIndex ? "Go to move (" + step.stepx + ", " + step.stepy + ")" : "Go to game start";
                 let butClass = step.stepIndex === this.state.stepNumber ? "btn btn-secondary active" : "btn btn-secondary"
                 return (
-                    <li key={move}>
+                    <li key={step.stepIndex}>
                         <button className={butClass} onClick={() => this.jumpTo(step.stepIndex)}>{desc}</button>
                     </li>
                 );
