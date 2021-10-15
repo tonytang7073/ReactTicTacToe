@@ -49,7 +49,13 @@
           "data": "whale 🐋🐋🐋🐋"
         },
         "noNode": {
-          "data": "dolphin 🐬🐬🐬"
+          "data": "can you live a very long age?",
+          "yesNode": {
+            "data": "Sea Turtle"
+          },
+          "noNode": {
+            "data": "dolphin 🐬🐬🐬"
+          }
         }
       },
       "noNode": {
@@ -84,7 +90,13 @@
                   "data": "Cat"
                 },
                 "noNode": {
-                  "data": "dog 🐶🐶🐶"
+                  "data": "Do you carry your bady in a porch?",
+                  "yesNode": {
+                    "data": "kangoroo"
+                  },
+                  "noNode": {
+                    "data": "dog 🐶🐶🐶"
+                  }
                 }
               }
             }
@@ -148,7 +160,13 @@
                 "data": "Seagull"
               },
               "noNode": {
-                "data": "eagle 🦅🦅🦅🦅"
+                "data": "do you usually live in a farm?",
+                "yesNode": {
+                  "data": "Chicken"
+                },
+                "noNode": {
+                  "data": "eagle 🦅🦅🦅🦅"
+                }
               }
             }
           }

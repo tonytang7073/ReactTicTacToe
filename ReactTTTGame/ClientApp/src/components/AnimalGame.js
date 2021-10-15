@@ -5,7 +5,7 @@ import BinaryTree from "../classes/BinaryTree"
 export class AnimalGame extends Component{
     constructor(props) {
         super(props);
-        this.state = {currentTree:null, currentNode: null, finalGuess:null, currentAnswer:null, currentMode:GameMode.INIT}
+        this.state = {currentTree:null, currentNode: null, finalGuess:null, currentAnswer:null, currentMode:GameMode.INIT, gameMessage: null}
     }
 
     componentDidMount() {
@@ -13,7 +13,7 @@ export class AnimalGame extends Component{
     }
 
     async populateGameData() {
-        const response = await fetch('data/animaltree.json');
+        const response = await fetch('api/WriteJson', { method: 'GET', headers: { 'Accept': 'application/json','Content-Type': 'application/json',}});
         const data = await response.json();
         this.setState({ currentTree: data });
     }
@@ -22,7 +22,7 @@ export class AnimalGame extends Component{
         let tree = this.state.currentTree;
         if (tree == null) { alert("Opps!, just a moment... Game data is not ready yet!"); }
         else {
-            this.setState({ currentNode: tree, finalGuess: null, currentAnswer: null, currentMode: GameMode.INPROGRESS });
+            this.setState({ currentNode: tree, finalGuess: null, currentAnswer: null, currentMode: GameMode.INPROGRESS, gameMessage: null });
         }
     }
 
@@ -52,10 +52,10 @@ export class AnimalGame extends Component{
             this.setState({ currentNode: nextNode });
         } else {
             if (yesNo === "y") {
-                this.setState({ meWin: "y", currentMode: GameMode.PLAYAGAIN });
+                this.setState({ gameMessage: "I Win!!!!!", currentMode: GameMode.PLAYAGAIN });
             }
             else {
-                this.setState({ meWin: "n", finalGuess:node.data, currentMode: GameMode.TRAINME });
+                this.setState({ finalGuess:node.data, currentMode: GameMode.TRAINME });
             }
         }
 
@@ -88,7 +88,13 @@ export class AnimalGame extends Component{
         }
 
 
-        fetch('api/WriteJson', {
+        this.saveGameData(fileDto);
+          
+
+    }
+
+    async saveGameData(fileDto) {
+        const resp = await fetch('api/WriteJson', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -97,8 +103,7 @@ export class AnimalGame extends Component{
             body: JSON.stringify(fileDto),
         });
 
-        this.setState({ currentMode: GameMode.INIT });
-          
+        this.setState({ gameMessage:"Thank you for training me to get better!!!", currentMode: GameMode.PLAYAGAIN });
 
     }
 
@@ -116,7 +121,7 @@ export class AnimalGame extends Component{
         let node = this.state.currentNode;
         let question = (node == null) ? null: (node.yesNode && node.noNode) ? node.data : "Is it " + this.aOran(node.data) + node.data + "?";
         let currentMode = this.state.currentMode;
-        let iWin = this.state.meWin;
+        let gameMessage = this.state.gameMessage;
 
         let guess = this.state.finalGuess;
         let answer = this.state.answer;
@@ -130,7 +135,7 @@ export class AnimalGame extends Component{
                 </div>
                 <div className="row">
                     <div class="col d-flex justify-content-center">
-                        <StartAGame iWin={iWin} mode={currentMode} handleOnClick={(e) => { this.handleNewGameOnClick(e) }} />
+                        <StartAGame gameMessage={gameMessage} mode={currentMode} handleOnClick={(e) => { this.handleNewGameOnClick(e) }} />
                     </div>
                 </div>
                 <div className="row">
@@ -171,13 +176,13 @@ function WelcomeMessage(props) {
 function StartAGame(props) {
 
     let mode = props.mode;
-    const iWin = props.iWin === 'y' ? true : false
+    const gameMessage = props.gameMessage;
     const playTitle = mode === GameMode.PLAYAGAIN ? "Play Again" : "Play Now"
 
     if (mode === GameMode.PLAYAGAIN || mode === GameMode.INIT) {
         return (
             <div>
-                <ShowIWin iWin={iWin} />
+                <ShowMessage Message={gameMessage} />
                 <h5>Thinking of an animal, once ready, click the {playTitle} button below.</h5>
                 <button type="button" onClick={props.handleOnClick} class="btn btn-primary btn-lg">{playTitle}</button>
             </div>
@@ -190,10 +195,10 @@ function StartAGame(props) {
   
 }
 
-function ShowIWin(props) {
-    if (props.iWin) {
+function ShowMessage(props) {
+    if (props.Message) {
         return (
-            <h3>I Win!!!!!</h3>
+            <h3>{ props.Message }</h3>
         );
     } else {
         return (null);
