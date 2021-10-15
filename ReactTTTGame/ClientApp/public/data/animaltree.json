@@ -1,0 +1,147 @@
+{
+  "data": "Are you a mammal?",
+  "yesNode": {
+    "data": "Do you have whiskers?",
+    "yesNode": {
+      "data": "Are you very small?",
+      "yesNode": {
+        "data": "Do you have a long tail?",
+        "yesNode": {
+          "data": "mouse 🐭🐭🐭"
+        },
+        "noNode": {
+          "data": "hamster 🐹🐹🐹"
+        }
+      },
+      "noNode": {
+        "data": "Are you a big cat?",
+        "yesNode": {
+          "data": "Do you have orange and black stripes?",
+          "yesNode": {
+            "data": "tiger 🐯🐯🐯"
+          },
+          "noNode": {
+            "data": "lion 🦁🦁🦁"
+          }
+        },
+        "noNode": {
+          "data": "Do you have a long mostly hairless tail?",
+          "yesNode": {
+            "data": "rat 🐀🐀🐀"
+          },
+          "noNode": {
+            "data": "Do people sometimes ride on your back?",
+            "yesNode": {
+              "data": "horse 🐴🐴🐴"
+            },
+            "noNode": {
+              "data": "house cat  🐈🐈🐈"
+            }
+          }
+        }
+      }
+    },
+    "noNode": {
+      "data": "Do you live in water �🌊🌊�🌊🌊?",
+      "yesNode": {
+        "data": "Do you have baleen in your mouth?",
+        "yesNode": {
+          "data": "whale 🐋🐋🐋🐋"
+        },
+        "noNode": {
+          "data": "dolphin 🐬🐬🐬"
+        }
+      },
+      "noNode": {
+        "data": "Do you live in 🌲🌲🌲🌲   trees?",
+        "yesNode": {
+          "data": "Do you keep your babies in a pouch?",
+          "yesNode": {
+            "data": "koala  🐨🐨🐨"
+          },
+          "noNode": {
+            "data": "monkey 🐒🐒🐒"
+          }
+        },
+        "noNode": {
+          "data": "Do you have really big antlers?",
+          "yesNode": {
+            "data": "moose "
+          },
+          "noNode": {
+            "data": "Are kind of grey skinned?",
+            "yesNode": {
+              "data": "elephant 🐘🐘🐘🐘"
+            },
+            "noNode": {
+              "data": "Do you have hard scales on your body?",
+              "yesNode": {
+                "data": "pangolin"
+              },
+              "noNode": {
+                "data": "Can you climb a tree?",
+                "yesNode": {
+                  "data": "Cat"
+                },
+                "noNode": {
+                  "data": "dog 🐶🐶🐶"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "noNode": {
+    "data": "Do you live exclusively in water 🌊🌊🌊?",
+    "yesNode": {
+      "data": "Do you have live primarily on the sea floor?",
+      "yesNode": {
+        "data": "Do you have spines on the outside of your body?",
+        "yesNode": {
+          "data": "sea urchin"
+        },
+        "noNode": {
+          "data": "octopus 🐙🐙🐙"
+        }
+      },
+      "noNode": {
+        "data": "fish 🐟🐟🐟"
+      }
+    },
+    "noNode": {
+      "data": "Do you have a very long neck?",
+      "yesNode": {
+        "data": "giraffe"
+      },
+      "noNode": {
+        "data": "Do you spend most of the day in water �🌊🌊�🌊🌊?",
+        "yesNode": {
+          "data": "Do you have wings but can't fly?",
+          "yesNode": {
+            "data": "penguin 🐧🐧🐧"
+          },
+          "noNode": {
+            "data": "hippo"
+          }
+        },
+        "noNode": {
+          "data": "Are you commonly found in cities 🏙🏙?",
+          "yesNode": {
+            "data": "pigeon"
+          },
+          "noNode": {
+            "data": "Do you typically live in colonies?",
+            "yesNode": {
+              "data": "ant 🐜🐜"
+            },
+            "noNode": {
+              "data": "eagle 🦅🦅🦅🦅"
+            }
+          }
+        }
+      }
+    }
+  }
+}
