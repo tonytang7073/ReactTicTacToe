@@ -113,7 +113,13 @@
     "noNode": {
       "data": "Do you have a very long neck?",
       "yesNode": {
-        "data": "giraffe"
+        "data": "Can you fly?",
+        "yesNode": {
+          "data": "Pelican"
+        },
+        "noNode": {
+          "data": "giraffe"
+        }
       },
       "noNode": {
         "data": "Do you spend most of the day in water �🌊🌊�🌊🌊?",
@@ -137,7 +143,13 @@
               "data": "ant 🐜🐜"
             },
             "noNode": {
-              "data": "eagle 🦅🦅🦅🦅"
+              "data": "do you like the beach?",
+              "yesNode": {
+                "data": "Seagull"
+              },
+              "noNode": {
+                "data": "eagle 🦅🦅🦅🦅"
+              }
             }
           }
         }

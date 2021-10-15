@@ -97,7 +97,7 @@ export class AnimalGame extends Component{
             body: JSON.stringify(fileDto),
         });
 
-        this.setState({ currentMode: GameMode.PLAYAGAIN });
+        this.setState({ currentMode: GameMode.INIT });
           
 
     }
