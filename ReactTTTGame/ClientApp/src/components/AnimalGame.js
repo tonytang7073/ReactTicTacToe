@@ -1,6 +1,6 @@
 ﻿import React, { Component } from "react";
 import BinaryNode from "../classes/BinaryNode"
-import BinaryTree from "../classes/BinaryTree"
+import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
 
 export class AnimalGame extends Component{
     constructor(props) {
@@ -26,9 +26,9 @@ export class AnimalGame extends Component{
         }
     }
 
-    handleRadioOnChange(e) {
-        this.setState({ currentAnswer:e.target.value})
-    }
+    //handleRadioOnChange(e) {
+    //    this.setState({ currentAnswer:e.target.value})
+    //}
 
     handleTextInputChange(e) {
         this.setState({
@@ -39,7 +39,7 @@ export class AnimalGame extends Component{
 
     handleSubmitOnClick(e) {
         let node = this.state.currentNode;
-        let yesNo = this.state.currentAnswer;
+        let yesNo = e.yesnoRadios;
         let nextNode = null;
         if (node.yesNode && node.noNode) {
             if (yesNo === "y") {
@@ -140,7 +140,7 @@ export class AnimalGame extends Component{
                 </div>
                 <div className="row">
                     <div class="col d-flex justify-content-center">
-                        <PlayGame data={question} mode={currentMode} handleOnClick={(e) => { this.handleSubmitOnClick(e) }} handleOnChange={(e) => { this.handleRadioOnChange(e) }} />
+                        <PlayGame data={question} mode={currentMode} handleOnClick={(e) => { this.handleSubmitOnClick(e) }} />
                     </div>
                 </div>
 
@@ -212,25 +212,48 @@ function PlayGame(props) {
     if (mode === GameMode.INPROGRESS) {
 
         return (
+
+
             <div>
-                <h4>{props.data}</h4>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="yesnoRadios" id="yesRadios" value="y" onChange={props.handleOnChange} />
-                    <label class="form-check-label" for="yesRadios">
-                        Yes
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="yesnoRadios" id="noRadios" value="n" onChange={props.handleOnChange} />
-                    <label class="form-check-label" for="noRadios">
-                        No
-                    </label>
-                </div>
-                <div>
-                    <button type="button" onClick={props.handleOnClick} class="btn btn-secondary btn-lg">Submit</button>
-                </div>
+                <Formik
+                    initialValues={{ yesnoRadios: "" }}
+                    validate={(values) => {
+                        let errors = {};
+                        if (values.yesnoRadios === "") {
+                            errors.yesnoRadios = "Please select Yes or No!";
+                        }
+                        return errors;
+                    }}
+                    onSubmit={(values, { resetForm }) => { props.handleOnClick(values); resetForm({}); }} //force to rest the form 
+                >
+                    {({ isSubmitting }) => (
+                        <Form>
+                            <h4>{props.data}</h4>
+                            <div class="form-check">
+                                <labe>
+                                    <Field type="radio" name="yesnoRadios" value="y" />
+                                    Yes
+                                </labe>
+
+                            </div>
+                            <div class="form-check">
+                                <labe>
+                                <Field type="radio" name="yesnoRadios" value="n" />
+                                No
+                                </labe>
+
+                            </div>
+                            <ErrorMessage name="yesnoRadios">{msg => <div style={{ color: 'red' }}>{msg}</div>}</ErrorMessage>
+                            <div>
+                                <button type="submit"  class="btn btn-secondary btn-lg">{isSubmitting ? "Please wait..." : "Submit"}</button>
+                            </div>
+
+                        </Form>
+                    )}
+                </Formik>
             </div>
         );
+
     } else {
         return (null);
     }
