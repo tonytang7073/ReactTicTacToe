@@ -30,11 +30,11 @@ export class AnimalGame extends Component{
     //    this.setState({ currentAnswer:e.target.value})
     //}
 
-    handleTextInputChange(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
-    }
+    //handleTextInputChange(e) {
+    //    this.setState({
+    //        [e.target.name]: e.target.value
+    //    });
+    //}
 
 
     handleSubmitOnClick(e) {
@@ -65,9 +65,9 @@ export class AnimalGame extends Component{
         let tree = this.state.currentTree;
         let node = this.state.currentNode;
         let guess = node.data;
-        let answer = this.state.answer;
-        let question = this.state.question;
-        let yesAnswer = this.state.yesAnswer;
+        let answer = e.answer;
+        let question = e.question;
+        let yesAnswer = e.yesAnswer;
 
         node.data = question;
         node.yesNode = new BinaryNode(yesAnswer);
@@ -124,7 +124,7 @@ export class AnimalGame extends Component{
         let gameMessage = this.state.gameMessage;
 
         let guess = this.state.finalGuess;
-        let answer = this.state.answer;
+       
 
         return (
             <div className="container">
@@ -146,7 +146,7 @@ export class AnimalGame extends Component{
 
                 <div className="row">
                     <div class="col d-flex justify-content-center">
-                        <TrainMe guess={guess} answer={answer} mode={currentMode} handleOnClick={(e) => { this.handleTrainMeOnClick(e) }} handleOnChange={(e) => { this.handleTextInputChange(e) }} />
+                        <TrainMe guess={guess}  mode={currentMode} handleOnClick={(e) => { this.handleTrainMeOnClick(e) }} />
                     </div>
                 </div>
              
@@ -262,30 +262,48 @@ function PlayGame(props) {
 function TrainMe(props) {
     let mode = props.mode;
    if (mode === GameMode.TRAINME) {
-        return (
-            <div>
-                <h3>Ooh, You win!! Please train me to be better!</h3>
-                <div class="form-group">
-                    <label for="answer">So, What is it?</label>
-                    <input type="text" class="form-control" id="answer" name="answer" onChange={props.handleOnChange} />
-                </div>
-                <div class="form-group">
-                    <label for="question">Suggest a yes/no question to distinguish {props.guess} from {props.answer}</label>
-                    <input type="text" class="form-control" id="question" name="question" onChange={props.handleOnChange} />
-                </div>
-                <div class="form-group">
-                    <label for="yesAnswer">The "Yes" answer for your question are: </label>
-                    <select class="form-control" id="yesAnswer" name="yesAnswer" onChange={props.handleOnChange} >
-                        <option value="--">-----</option>
-                        <option value={props.guess}>{props.guess}</option>
-                        <option value={props.answer}>{props.answer}</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary" onClick={props.handleOnClick}>Submit</button>
+       return (
+           <div>
+               <Formik
+                   initialValues={{ answer: "", question: "", yesAnswer: "--" }}
+                   validate={(values) => {
+                       let errors = {};
+                       if (values.answer === "") { errors.answer = "What is it can not be empty!"; }
+                       if (values.question === "") { errors.question = "The distinguishing question can not be empty!"; }
+                       if (values.yesAnswer === "--") { errors.yesAnswer = "Please select an answer!"; }
+                       return errors;
+                   }}
+                   onSubmit={(values, { resetForm }) => { props.handleOnClick(values); resetForm({ answer: "", question: "", yesAnswer: "--" }); }} //force to rest the form
+               >
+                   {({ values, isSubmitting, errors, touched }) => (
+                       <Form>
+                           <h3>Ooh, You win!! Please train me to be better!</h3>
+                           <div class="form-group">
+                               <label for="answer">So, What is it?</label>
+                               <Field type="text" class="form-control" id="answer" name="answer" />
+                               <ErrorMessage name="answer">{msg => <div style={{ color: 'red' }}>{msg}</div>}</ErrorMessage>
+                           </div>
+                           <div class="form-group">
+                               <label for="question">Suggest a yes/no question to distinguish {props.guess} from {values.answer}</label>
+                               <Field type="text" class="form-control" id="question" name="question" />
+                               <ErrorMessage name="question">{msg => <div style={{ color: 'red' }}>{msg}</div>}</ErrorMessage>
+                           </div>
+                           <div class="form-group">
+                               <label for="yesAnswer">The "Yes" answer for your question are: </label>
+                               <Field as="select" class="form-control" id="yesAnswer" name="yesAnswer" >
+                                   <option value="--">-----</option>
+                                   <option value={props.guess}>{props.guess}</option>
+                                   <option value={values.answer}>{values.answer}</option>
+                               </Field>
+                               <ErrorMessage name="yesAnswer">{msg => <div style={{ color: 'red' }}>{msg}</div>}</ErrorMessage>
+                           </div>
+                           <button type="submit" class="btn btn-primary">{isSubmitting ? "Please wait..." : "Submit"}</button>
+                       </Form>
+                   )}
+               </Formik>
+           </div>
 
-            </div>
-
-        );
+       );
     } else {
         return (null);
     }
