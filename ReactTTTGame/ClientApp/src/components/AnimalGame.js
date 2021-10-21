@@ -5,7 +5,7 @@ import { Formik, Form, Field, ErrorMessage, useFormik } from "formik";
 export class AnimalGame extends Component{
     constructor(props) {
         super(props);
-        this.state = {currentTree:null, currentNode: null, finalGuess:null, currentAnswer:null, currentMode:GameMode.INIT, gameMessage: null}
+        this.state = {currentTree:null, currentNode: null, finalGuess:null, currentMode:GameMode.INIT, gameMessage: null}
     }
 
     componentDidMount() {
@@ -22,7 +22,7 @@ export class AnimalGame extends Component{
         let tree = this.state.currentTree;
         if (tree == null) { alert("Opps!, just a moment... Game data is not ready yet!"); }
         else {
-            this.setState({ currentNode: tree, finalGuess: null, currentAnswer: null, currentMode: GameMode.INPROGRESS, gameMessage: null });
+            this.setState({ currentNode: tree, finalGuess: null, currentMode: GameMode.INPROGRESS, gameMessage: null });
         }
     }
 

@@ -27,7 +27,13 @@
         "noNode": {
           "data": "Do you have a long mostly hairless tail?",
           "yesNode": {
-            "data": "rat 🐀🐀🐀"
+            "data": "can you meow?",
+            "yesNode": {
+              "data": "Cat"
+            },
+            "noNode": {
+              "data": "rat 🐀🐀🐀"
+            }
           },
           "noNode": {
             "data": "Do people sometimes ride on your back?",
