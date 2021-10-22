@@ -90,9 +90,11 @@ export class TicTacToe extends Component {
                 const desc = step.stepIndex ? "Go to move (" + step.stepx + ", " + step.stepy + ")" : "Go to game start";
                 let butClass = step.stepIndex === this.state.stepNumber ? "btn btn-secondary active" : "btn btn-secondary"
                 return (
-                    <li key={step.stepIndex}>
-                        <button className={butClass} onClick={() => this.jumpTo(step.stepIndex)}>{desc}</button>
-                    </li>
+                    <tr>
+                        <td>{step.stepIndex + 1}</td>
+                        <td> <button className={butClass} onClick={() => this.jumpTo(step.stepIndex)}>{desc}</button></td>
+                    </tr>
+
                 );
 
             });
@@ -132,8 +134,18 @@ export class TicTacToe extends Component {
                     </div>
                     <div class="col">
                         <div>
-                            <button onClick={() => this.handleSortByClick()}>Sort <span class={this.state.sortAscending ? "fa fa-sort-amount-asc" : "fa fa-sort-amount-desc"}></span></button>
-                            <ol>{moves}</ol>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><button  onClick={() => this.handleSortByClick()}>#<span class={this.state.sortAscending ? "fa fa-sort-amount-asc" : "fa fa-sort-amount-desc"}></span></button></th>
+                                        <th>History Moves</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {moves}
+                                </tbody>
+                            </table>
+
                         </div>
                     </div>
                 </div>
